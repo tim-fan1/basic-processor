@@ -11,6 +11,9 @@ module controller_onehotdecoder(d, q);
 		G = 1 << 8,
 		A = 1 << 9,
 		EXTERN = 1 << 10,
+		ISR = 1 << 11, // instruction reg.
+		PCR = 1 << 12, // program counter reg.
+		ROM = 1 << 13, // instruction memory.
 		UNUSED = 1 << 15;
 	input [3:0] d;
 	output reg [15:0] q;
@@ -27,6 +30,9 @@ module controller_onehotdecoder(d, q);
 		4'b1000: q <= G;
 		4'b1001: q <= A;
 		4'b1010: q <= EXTERN;
+		4'b1011: q <= ISR;
+		4'b1100: q <= PCR;
+		4'b1101: q <= ROM;
 		default: q <= UNUSED;
 		endcase
 	end

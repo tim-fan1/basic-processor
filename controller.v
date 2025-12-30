@@ -1,31 +1,29 @@
-module controller(clock, resetnot, instruction, rout, ren, addxor, increment);
+module controller(clock, resetnot, ISR, rout, ren, currstate, nextstate, opcode);
 	input clock, resetnot;
 
 	// Received from datapath.
-	input [7:0] instruction;
+	input [7:0] ISR;
 
 	// Send to datapath.
 	output [15:0] rout, ren;
-	output addxor;
 
-	// Send to program counter.
-	output increment;
+	// Internal wires, made visible for debugging.
+	output wire [1:0] opcode;
+	output wire [3:0] currstate, nextstate;
 
-	wire [3:0] currstate, nextstate;
 	controller_combnext combnext(
 		.currstate(currstate), 
-		.instruction(instruction),
+		.ISR(ISR),
 
-		.nextstate(nextstate)
+		.nextstate(nextstate),
+		.opcode(opcode)
 	);
 	controller_combout combout(
 		.currstate(currstate), 
-		.instruction(instruction), 
+		.ISR(ISR), 
 
 		.rout(rout), 
-		.ren(ren),
-		.addxor(addxor),
-		.increment(increment)
+		.ren(ren)
 	);
 	controller_regstate regstate(
 		.d(nextstate), 
